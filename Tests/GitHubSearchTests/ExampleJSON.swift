@@ -64,3 +64,21 @@ extension SearchResponse where Item == Repository {
         """
     }
 }
+
+extension GitHubAPIError {
+    static var exampleJSON: String {
+        return """
+        {
+            "message": "Validation Failed",
+            "errors": [
+                {
+                    "resource": "Search",
+                    "field": "q",
+                    "code": "missing"
+                }
+            ],
+            "documentation_url": "https://developer.github.com/v3/search"
+        }
+        """
+    }
+}
