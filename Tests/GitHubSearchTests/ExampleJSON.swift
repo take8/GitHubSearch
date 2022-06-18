@@ -33,3 +33,34 @@ extension Repository {
         """
     }
 }
+
+extension SearchResponse where Item == Repository {
+    static var exampleJSON: String {
+        return """
+        {
+            "total_count": 241659,
+            "items": [
+                \(Repository.exampleJSON),
+                {
+                    "id": 790019,
+                    "name": "swift",
+                    "full_name": "openstack/swift",
+                    "owner": {
+                        "login": "openstack",
+                        "id": 324574
+                    }
+                },
+                {
+                    "id": 130902948,
+                    "name": "swift",
+                    "full_name": "tensorflow/swift",
+                    "owner": {
+                        "login": "tensorflow",
+                        "id": 15658638
+                    }
+                }
+            ]
+        }
+        """
+    }
+}
