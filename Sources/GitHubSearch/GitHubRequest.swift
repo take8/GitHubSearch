@@ -8,6 +8,8 @@
 import Foundation
 
 public protocol GitHubRequest {
+    associatedtype Response: Decodable
+
     var baseURL: URL { get }
     var path: String { get }
     var method: HTTPMethod { get }
