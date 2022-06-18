@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum GitHubClientError {
+public enum GitHubClientError : Error {
     // 通信に失敗
     case connectionError(Error)
 
