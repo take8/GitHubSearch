@@ -48,6 +48,67 @@ class GitHubClientTests: XCTestCase {
         wait(for: [apiExpectation], timeout: 3)
     }
 
+    // 通信に失敗した場合
+    func testFailureByConnectionError() throws {
+        httpClient.result = .failure(URLError(.cannotConnectToHost))
+
+        let request = GitHubAPI.SearchRepositories(keyword: "swift")
+        let apiExpectation = expectation(description: "")
+        gitHubClient.send(request: request) { result in
+            switch result {
+            case .failure(.connectionError):
+                break;
+            default:
+                XCTFail("unexpected result: \(result)")
+            }
+            apiExpectation.fulfill()
+        }
+
+        wait(for: [apiExpectation], timeout: 3)
+    }
+
+    // レスポンスの解釈に失敗した場合
+    func testFailureByResponseParseError() throws {
+        httpClient.result = makeHTTPClientResult(
+            statusCode: 200,
+            json: "{}")
+
+        let request = GitHubAPI.SearchRepositories(keyword: "swift")
+        let apiExpectation = expectation(description: "")
+        gitHubClient.send(request: request) { result in
+            switch result {
+            case .failure(.responseParseError):
+                break;
+            default:
+                XCTFail("unexpected result: \(result)")
+            }
+            apiExpectation.fulfill()
+        }
+
+        wait(for: [apiExpectation], timeout: 3)
+    }
+
+    // エラーレスポンスを受け取った場合
+    func testFailureByAPIError() throws {
+        httpClient.result = makeHTTPClientResult(
+            statusCode: 400,
+            json: GitHubAPIError.exampleJSON)
+
+        let request = GitHubAPI.SearchRepositories(keyword: "swift")
+        let apiExpectation = expectation(description: "")
+        gitHubClient.send(request: request) { result in
+            switch result {
+            case .failure(.apiError):
+                break;
+            default:
+                XCTFail("unexpected result: \(result)")
+            }
+            apiExpectation.fulfill()
+        }
+
+        wait(for: [apiExpectation], timeout: 3)
+    }
+
     private func makeHTTPClientResult(statusCode: Int, json: String) -> Result<(Data, HTTPURLResponse), Error> {
         return .success((
             json.data(using: .utf8)!,
