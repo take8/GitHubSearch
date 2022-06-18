@@ -7,7 +7,7 @@
 
 import Foundation
 
-class GitHubClient {
+public class GitHubClient {
     private let httpClient: HTTPClient
 
     public init(httpClient: HTTPClient) {

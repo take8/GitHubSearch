@@ -11,6 +11,10 @@ public final class GitHubAPI {
     public struct SearchRepositories : GitHubRequest {
         public let keyword: String
 
+        public init(keyword: String) {
+            self.keyword = keyword
+        }
+
         // GitHubRequestが要求する連想型
         public typealias Response = SearchResponse<Repository>
 
